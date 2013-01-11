@@ -31,7 +31,7 @@ RequestSigner.prototype.matchHost = function(host) {
 }
 
 RequestSigner.prototype.createHost = function() {
-  var region = ~['iam', 'sts'].indexOf(this.service) ? '' : '.' + this.region
+  var region = ~['iam', 'importexport'].indexOf(this.service) ? '' : '.' + this.region
   return this.service + region + '.amazonaws.com'
 }
 
