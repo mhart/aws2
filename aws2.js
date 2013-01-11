@@ -5,10 +5,6 @@ var querystring = require('querystring')
 
 // http://docs.amazonwebservices.com/general/latest/gr/signature-version-2.html
 
-function hmac(key, string, encoding) {
-  return crypto.createHmac('sha256', key).update(string, 'utf8').digest(encoding)
-}
-
 // request: { path | body, [host], [method], [headers], [service], [region] }
 // credentials: { accessKeyId, secretAccessKey, [sessionToken] }
 function RequestSigner(request, credentials) {
