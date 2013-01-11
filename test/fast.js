@@ -47,9 +47,14 @@ describe('aws2', function() {
 
   describe('#sign() with no host or region', function() {
     it('should add hostname and default region', function() {
-      var opts = aws2.sign({ service: 'sqs', path: path, headers: { Date: date } })
+      var opts = aws2.sign({ service: 'sqs' })
       opts.hostname.should.equal('sqs.us-east-1.amazonaws.com')
       opts.headers['Host'].should.equal('sqs.us-east-1.amazonaws.com')
+    })
+    it('should add hostname and no region if service is regionless', function() {
+      var opts = aws2.sign({ service: 'iam' })
+      opts.hostname.should.equal('iam.amazonaws.com')
+      opts.headers['Host'].should.equal('iam.amazonaws.com')
     })
   })
 
