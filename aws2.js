@@ -69,6 +69,7 @@ RequestSigner.prototype.sign = function() {
   params['SignatureMethod'] = 'HmacSHA256'
   params['AWSAccessKeyId'] = this.credentials.accessKeyId
 
+  ;delete params['Signature']
   params['Signature'] = this.signature()
 
   query = querystring.stringify(params)
