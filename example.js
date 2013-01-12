@@ -59,24 +59,6 @@ request(aws2.sign({
 
 // works with all other services that support Signature Version 2
 
-request(aws2.sign({ service: 'autoscaling', path: '/?Action=DescribeAutoScalingInstances&Version=2011-01-01' }))
-/*
-<DescribeAutoScalingInstancesResponse xmlns="http://autoscaling.amazonaws.com/doc/2011-01-01/">
-...
-*/
-
-request(aws2.sign({ service: 'elasticloadbalancing', path: '/?Action=DescribeLoadBalancers&Version=2012-06-01' }))
-/*
-<DescribeLoadBalancersResponse xmlns="http://elasticloadbalancing.amazonaws.com/doc/2012-06-01/">
-...
-*/
-
-request(aws2.sign({ service: 'cloudformation', path: '/?Action=ListStacks&Version=2010-05-15' }))
-/*
-<ListStacksResponse xmlns="http://cloudformation.amazonaws.com/doc/2010-05-15/">
-...
-*/
-
 request(aws2.sign({ service: 'ec2', path: '/?Action=DescribeRegions&Version=2012-12-01' }))
 /*
 <?xml version="1.0" encoding="UTF-8"?>
@@ -87,12 +69,6 @@ request(aws2.sign({ service: 'ec2', path: '/?Action=DescribeRegions&Version=2012
 request(aws2.sign({ service: 'elasticache', path: '/?Action=DescribeCacheClusters&Version=2012-11-15' }))
 /*
 <DescribeCacheClustersResponse xmlns="http://elasticache.amazonaws.com/doc/2012-11-15/">
-...
-*/
-
-request(aws2.sign({ service: 'elasticbeanstalk', path: '/?Action=ListAvailableSolutionStacks&Version=2010-12-01' }))
-/*
-<ListAvailableSolutionStacksResponse xmlns="http://elasticbeanstalk.amazonaws.com/docs/2010-12-01/">
 ...
 */
 
@@ -114,5 +90,4 @@ request(aws2.sign({ service: 'sdb', path: '/?Action=ListDomains&Version=2009-04-
 <ListDomainsResponse xmlns="http://sdb.amazonaws.com/doc/2009-04-15/">
 ...
 */
-
 
