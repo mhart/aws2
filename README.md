@@ -6,6 +6,16 @@ aws2
 A small utility to sign vanilla node.js http(s) request options using Amazon's
 [AWS Signature Version 2](http://docs.amazonwebservices.com/general/latest/gr/signature-version-2.html).
 
+This signature is supported by a number of Amazon services, including
+[SNS](http://docs.aws.amazon.com/sns/latest/api/),
+[RDS](http://docs.aws.amazon.com/AmazonRDS/latest/APIReference/),
+[CloudWatch](http://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/),
+[EC2](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/),
+[ElastiCache](http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/),
+[Elastic MapReduce](http://docs.aws.amazon.com/ElasticMapReduce/latest/API/),
+[ImportExport](http://docs.aws.amazon.com/AWSImportExport/latest/API/) and
+[SimpleDB](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API.html).
+
 It also provides defaults for a number of core AWS headers and
 request parameters, making it a very easy to query AWS services, or
 build out a fully-featured AWS library.
