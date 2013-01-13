@@ -123,7 +123,7 @@ API
 ### aws2.sign(requestOptions, [credentials])
 
 This calculates and populates the `Signature` param of either
-`requestOptions.path` or requestOptions.body` depending on whether it is
+`requestOptions.path` or `requestOptions.body` depending on whether it is
 a `GET` or `POST` request. Returns `requestOptions` as a convenience for
 chaining.
 
