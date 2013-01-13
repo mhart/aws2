@@ -69,15 +69,17 @@ RequestSigner.prototype.sign = function() {
   params['SignatureMethod'] = 'HmacSHA256'
   params['AWSAccessKeyId'] = this.credentials.accessKeyId
 
-  ;delete params['Signature']
+  delete params['Signature']
   params['Signature'] = this.signature()
 
   query = querystring.stringify(params)
 
-  if (request.body)
+  if (request.body) {
     request.body = query
-  else
+    headers['Content-Length'] = Buffer.byteLength(request.body)
+  } else {
     request.path = pathParts[0] + '?' + query
+  }
 
   return request
 }
