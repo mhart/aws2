@@ -1,2 +1,2 @@
 var should = require('should')
-  , aws4   = require('../')
+  , aws2   = require('../')

@@ -8,13 +8,10 @@
     "amazon",
     "aws",
     "signature",
-    "monitoring",
-    "cloudwatch",
     "ec2",
     "elasticache",
     "elasticmapreduce",
     "importexport",
-    "rds",
     "sns",
     "sdb",
     "simpledb"

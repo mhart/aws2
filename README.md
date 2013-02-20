@@ -6,10 +6,8 @@ aws2
 A small utility to sign vanilla node.js http(s) request options using Amazon's
 [AWS Signature Version 2](http://docs.amazonwebservices.com/general/latest/gr/signature-version-2.html).
 
-This signature is supported by a number of Amazon services, including
+This signature is supported by a number of (older) Amazon services, including
 [SNS](http://docs.aws.amazon.com/sns/latest/api/),
-[RDS](http://docs.aws.amazon.com/AmazonRDS/latest/APIReference/),
-[CloudWatch](http://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/),
 [EC2](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/),
 [ElastiCache](http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/),
 [Elastic MapReduce](http://docs.aws.amazon.com/ElasticMapReduce/latest/API/),
@@ -20,7 +18,7 @@ It also provides defaults for a number of core AWS headers and
 request parameters, making it a very easy to query AWS services, or
 build out a fully-featured AWS library.
 
-*NB: It is preferrable to use the more secure
+*NB: It is preferrable to use the newer, more secure
 [aws4](https://github.com/mhart/aws4) over this library for AWS services
 that support AWS Signature Version 4.*
 
@@ -41,7 +39,7 @@ console.log(opts)
 /*
 {
   host: 'sns.us-east-1.amazonaws.com',
-  path: '/?Action=ListTopics&Timestamp=2013-01-12T01%3A25%3A55.553Z&SignatureVersion=2&SignatureMethod=HmacSHA256&AWSAccessKeyId=AKIAIHHJHZVAHCEWLG7A&Signature=LyWO%2B%2B%2BZ6x2i7LvQKcbX5HdiFs995kkyqmyTI5y6LCg%3D',
+  path: '/?Action=ListTopics&Timestamp=2013-01-12T01%3A25%3A55.553Z&SignatureVersion=2&SignatureMethod=...'
   headers: { Host: 'sns.us-east-1.amazonaws.com' }
 }
 */
@@ -70,46 +68,34 @@ function request(o) { https.request(o, function(res) { res.pipe(process.stdout) 
 
 // aws2 can infer the HTTP method if a body is passed in
 // method will be POST and Content-Type: 'application/x-www-form-urlencoded; charset=utf-8'
-request(aws2.sign({ service: 'monitoring', body: 'Action=ListMetrics&Version=2010-08-01' }))
-/*
-<ListMetricsResponse xmlns="http://monitoring.amazonaws.com/doc/2010-08-01/">
-...
-*/
-
-// can specify any custom option or header as per usual
-request(aws2.sign({
-  service: 'rds',
-  region: 'ap-southeast-2',
-  method: 'POST',
-  path: '/',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
-  body: 'Action=DescribeDBInstances&Version=2012-09-17'
-}))
-/*
-<DescribeDBInstancesResponse xmlns="http://rds.amazonaws.com/doc/2012-09-17/">
-...
-*/
-
-// works with all other services that support Signature Version 2
-
-request(aws2.sign({ service: 'ec2', path: '/?Action=DescribeRegions&Version=2012-12-01' }))
+request(aws2.sign({ service: 'ec2', body: 'Action=DescribeRegions&Version=2012-12-01' }))
 /*
 <?xml version="1.0" encoding="UTF-8"?>
 <DescribeRegionsResponse xmlns="http://ec2.amazonaws.com/doc/2012-12-01/">
 ...
 */
 
-request(aws2.sign({ service: 'elasticache', path: '/?Action=DescribeCacheClusters&Version=2012-11-15' }))
+// can specify any custom option or header as per usual
+request(aws2.sign({
+  service: 'elasticmapreduce',
+  region: 'ap-southeast-2',
+  method: 'POST',
+  path: '/',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: 'Action=DescribeJobFlows&Version=2009-03-31'
+}))
 /*
-<DescribeCacheClustersResponse xmlns="http://elasticache.amazonaws.com/doc/2012-11-15/">
+<DescribeJobFlowsResponse xmlns="http://elasticmapreduce.amazonaws.com/doc/2009-03-31">
 ...
 */
 
-request(aws2.sign({ service: 'elasticmapreduce', path: '/?Action=DescribeJobFlows&Version=2009-03-31' }))
+// works with all other services that support Signature Version 2
+
+request(aws2.sign({ service: 'elasticache', path: '/?Action=DescribeCacheClusters&Version=2012-11-15' }))
 /*
-<DescribeJobFlowsResponse xmlns="http://elasticmapreduce.amazonaws.com/doc/2009-03-31">
+<DescribeCacheClustersResponse xmlns="http://elasticache.amazonaws.com/doc/2012-11-15/">
 ...
 */
 
