@@ -1,7 +1,7 @@
-var aws2        = exports
-var url         = require('url')
-var crypto      = require('crypto')
-var querystring = require('querystring')
+var aws2        = exports,
+    url         = require('url'),
+    crypto      = require('crypto'),
+    querystring = require('querystring')
 
 // http://docs.amazonwebservices.com/general/latest/gr/signature-version-2.html
 
@@ -11,8 +11,8 @@ function RequestSigner(request, credentials) {
 
   if (typeof request === 'string') request = url.parse(request)
 
-  var headers = request.headers || {}
-    , hostParts = this.matchHost(request.hostname || request.host || headers['Host'])
+  var headers = request.headers || {},
+      hostParts = this.matchHost(request.hostname || request.host || headers.Host)
 
   this.request = request
   this.credentials = credentials || this.defaultCredentials()
@@ -41,36 +41,36 @@ RequestSigner.prototype.createHost = function() {
 }
 
 RequestSigner.prototype.sign = function() {
-  var request = this.request
-    , headers = request.headers = (request.headers || {})
-    , date = new Date(headers['Date'] || new Date)
-    , pathParts = this.pathParts = (request.path || '/').split('?', 2)
-    , query = request.body || pathParts[1]
-    , params = this.params = querystring.parse(query)
+  var request = this.request,
+      headers = request.headers = (request.headers || {}),
+      date = new Date(headers.Date || new Date),
+      pathParts = this.pathParts = (request.path || '/').split('?', 2),
+      query = request.body || pathParts[1],
+      params = this.params = querystring.parse(query)
 
   if (!request.method && request.body)
     request.method = 'POST'
 
-  if (!headers['Host'] && !headers['host'])
-    headers['Host'] = request.hostname || request.host || this.createHost()
+  if (!headers.Host && !headers.host)
+    headers.Host = request.hostname || request.host || this.createHost()
   if (!request.hostname && !request.host)
-    request.hostname = headers['Host'] || headers['host']
+    request.hostname = headers.Host || headers.host
 
   if (request.body && !headers['Content-Type'] && !headers['content-type'])
     headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8'
 
   if (this.credentials.sessionToken) {
     headers['X-Amz-Security-Token'] = this.credentials.sessionToken
-    params['SecurityToken'] = this.credentials.sessionToken
+    params.SecurityToken = this.credentials.sessionToken
   }
 
-  params['Timestamp'] = date.toISOString()
-  params['SignatureVersion'] = '2'
-  params['SignatureMethod'] = 'HmacSHA256'
-  params['AWSAccessKeyId'] = this.credentials.accessKeyId
+  params.Timestamp = date.toISOString()
+  params.SignatureVersion = '2'
+  params.SignatureMethod = 'HmacSHA256'
+  params.AWSAccessKeyId = this.credentials.accessKeyId
 
-  delete params['Signature']
-  params['Signature'] = this.signature()
+  if (params.Signature) delete params.Signature
+  params.Signature = this.signature()
 
   query = querystring.stringify(params)
 

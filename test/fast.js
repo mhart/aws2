@@ -1,9 +1,9 @@
-var should = require('should')
-  , aws2   = require('../')
-  , cred   = { accessKeyId: 'ABCDEF', secretAccessKey: 'abcdef1234567890' }
-  , date   = 'Wed, 26 Dec 2012 06:10:30 GMT'
-  , path   = '/?Action=ListQueues&Version=2009-02-01'
-  , sig    = /Signature=DLYbFaqPn%2BgKVbpNrqA6feoGyczH%2B30nNmlFYGS18yk%3D/
+require('should')
+var aws2   = require('../'),
+    cred   = { accessKeyId: 'ABCDEF', secretAccessKey: 'abcdef1234567890' },
+    date   = 'Wed, 26 Dec 2012 06:10:30 GMT',
+    path   = '/?Action=ListQueues&Version=2009-02-01',
+    sig    = /Signature=DLYbFaqPn%2BgKVbpNrqA6feoGyczH%2B30nNmlFYGS18yk%3D/
 
 describe('aws2', function() {
 
@@ -39,8 +39,8 @@ describe('aws2', function() {
 
   describe('#sign() with credentials', function() {
     it('should use passed in values', function() {
-      var cred = { accessKeyId: 'A', secretAccessKey: 'B' }
-        , opts = aws2.sign({ service: 'sqs', path: path, headers: { Date: date } }, cred)
+      var cred = { accessKeyId: 'A', secretAccessKey: 'B' },
+          opts = aws2.sign({ service: 'sqs', path: path, headers: { Date: date } }, cred)
       opts.path.should.match(/Z0LJr9UHo%2FvePJ8fUhB5fMqog%2Fi6tNHib25%2BItMSfDY%3D/)
     })
   })
@@ -49,12 +49,12 @@ describe('aws2', function() {
     it('should add hostname and default region', function() {
       var opts = aws2.sign({ service: 'sqs' })
       opts.hostname.should.equal('sqs.us-east-1.amazonaws.com')
-      opts.headers['Host'].should.equal('sqs.us-east-1.amazonaws.com')
+      opts.headers.Host.should.equal('sqs.us-east-1.amazonaws.com')
     })
     it('should add hostname and no region if service is regionless', function() {
       var opts = aws2.sign({ service: 'iam' })
       opts.hostname.should.equal('iam.amazonaws.com')
-      opts.headers['Host'].should.equal('iam.amazonaws.com')
+      opts.headers.Host.should.equal('iam.amazonaws.com')
     })
   })
 
@@ -62,7 +62,7 @@ describe('aws2', function() {
     it('should add correct hostname', function() {
       var opts = aws2.sign({ service: 'glacier', region: 'us-west-1' })
       opts.hostname.should.equal('glacier.us-west-1.amazonaws.com')
-      opts.headers['Host'].should.equal('glacier.us-west-1.amazonaws.com')
+      opts.headers.Host.should.equal('glacier.us-west-1.amazonaws.com')
     })
   })
 

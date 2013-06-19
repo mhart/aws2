@@ -1,6 +1,6 @@
-var http  = require('http')
-  , https = require('https')
-  , aws2  = require('aws2')
+var http  = require('http'),
+    https = require('https'),
+    aws2  = require('aws2')
 
 // given an options object you could pass to http.request
 var opts = { host: 'sns.us-east-1.amazonaws.com', path: '/?Action=ListTopics' }

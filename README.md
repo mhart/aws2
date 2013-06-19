@@ -7,7 +7,6 @@ A small utility to sign vanilla node.js http(s) request options using Amazon's
 [AWS Signature Version 2](http://docs.amazonwebservices.com/general/latest/gr/signature-version-2.html).
 
 This signature is supported by a number of (older) Amazon services, including
-[SNS](http://docs.aws.amazon.com/sns/latest/api/),
 [EC2](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/),
 [ElastiCache](http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/),
 [Elastic MapReduce](http://docs.aws.amazon.com/ElasticMapReduce/latest/API/),
