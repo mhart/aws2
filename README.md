@@ -6,12 +6,12 @@ aws2
 A small utility to sign vanilla node.js http(s) request options using Amazon's
 [AWS Signature Version 2](http://docs.amazonwebservices.com/general/latest/gr/signature-version-2.html).
 
-This signature is supported by a number of (older) Amazon services, namely
+This signature is supported by (older) Amazon services, namely
 [ImportExport](http://docs.aws.amazon.com/AWSImportExport/latest/API/) and
 [SimpleDB](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API.html).
 
 It also provides defaults for a number of core AWS headers and
-request parameters, making it a very easy to query AWS services, or
+request parameters, making it very easy to query AWS services, or
 build out a fully-featured AWS library.
 
 *NB: It is preferrable to use the newer, more secure
