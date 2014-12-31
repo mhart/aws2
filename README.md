@@ -6,10 +6,7 @@ aws2
 A small utility to sign vanilla node.js http(s) request options using Amazon's
 [AWS Signature Version 2](http://docs.amazonwebservices.com/general/latest/gr/signature-version-2.html).
 
-This signature is supported by a number of (older) Amazon services, including
-[EC2](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/),
-[ElastiCache](http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/),
-[Elastic MapReduce](http://docs.aws.amazon.com/ElasticMapReduce/latest/API/),
+This signature is supported by a number of (older) Amazon services, namely
 [ImportExport](http://docs.aws.amazon.com/AWSImportExport/latest/API/) and
 [SimpleDB](http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/SDB_API.html).
 
@@ -25,29 +22,31 @@ Example
 -------
 
 ```javascript
-var http  = require('http')
-  , https = require('https')
-  , aws2  = require('aws2')
+var http  = require('http'),
+    https = require('https'),
+    aws2  = require('aws2')
 
 // given an options object you could pass to http.request
-var opts = { host: 'sns.us-east-1.amazonaws.com', path: '/?Action=ListTopics' }
+var opts = { host: 'sdb.amazonaws.com', path: '/?Action=ListDomains&Version=2009-04-15' }
+
+// alternatively (as aws2 can infer the host):
+opts = { service: 'sdb', path: '/?Action=ListDomains&Version=2009-04-15' }
 
 aws2.sign(opts) // assumes AWS credentials are available in process.env
 
 console.log(opts)
 /*
 {
-  host: 'sns.us-east-1.amazonaws.com',
-  path: '/?Action=ListTopics&Timestamp=2013-01-12T01%3A25%3A55.553Z&SignatureVersion=2&SignatureMethod=...'
-  headers: { Host: 'sns.us-east-1.amazonaws.com' }
+  host: 'importexport.amazonaws.com',
+  path: '/?Action=ListJobs&Timestamp=2013-01-12T01%3A25%3A55.553Z&SignatureVersion=2&SignatureMethod=...'
+  headers: { Host: 'importexport.amazonaws.com' }
 }
 */
 
 // we can now use this to query AWS using the standard node.js http API
 http.request(opts, function(res) { res.pipe(process.stdout) }).end()
 /*
-<?xml version="1.0"?>
-<ListTopicsResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+<ListDomainsResponse xmlns="http://sdb.amazonaws.com/doc/2009-04-15/">
 ...
 */
 ```
@@ -56,58 +55,32 @@ More options
 ------------
 
 ```javascript
-// you can pass AWS credentials in explicitly
+// you can pass AWS credentials in explicitly (otherwise taken from process.env)
 aws2.sign(opts, { accessKeyId: '', secretAccessKey: '' })
-
-// aws2 can infer the host from a service and region
-opts = aws2.sign({ service: 'sns', region: 'us-east-1', path: '/?Action=ListTopics' })
 
 // create a utility function to pipe to stdout (with https this time)
 function request(o) { https.request(o, function(res) { res.pipe(process.stdout) }).end(o.body || '') }
 
 // aws2 can infer the HTTP method if a body is passed in
 // method will be POST and Content-Type: 'application/x-www-form-urlencoded; charset=utf-8'
-request(aws2.sign({ service: 'ec2', body: 'Action=DescribeRegions&Version=2012-12-01' }))
-/*
-<?xml version="1.0" encoding="UTF-8"?>
-<DescribeRegionsResponse xmlns="http://ec2.amazonaws.com/doc/2012-12-01/">
-...
-*/
-
-// can specify any custom option or header as per usual
-request(aws2.sign({
-  service: 'elasticmapreduce',
-  region: 'ap-southeast-2',
-  method: 'POST',
-  path: '/',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
-  body: 'Action=DescribeJobFlows&Version=2009-03-31'
-}))
-/*
-<DescribeJobFlowsResponse xmlns="http://elasticmapreduce.amazonaws.com/doc/2009-03-31">
-...
-*/
-
-// works with all other services that support Signature Version 2
-
-request(aws2.sign({ service: 'elasticache', path: '/?Action=DescribeCacheClusters&Version=2012-11-15' }))
-/*
-<DescribeCacheClustersResponse xmlns="http://elasticache.amazonaws.com/doc/2012-11-15/">
-...
-*/
-
-request(aws2.sign({ service: 'importexport', path: '/?Action=ListJobs&Version=2010-06-01' }))
+request(aws2.sign({ service: 'importexport', body: 'Action=ListJobs&Version=2010-06-01' }))
 /*
 <ListJobsResponse xmlns="http://importexport.amazonaws.com/doc/2010-06-01/">
 ...
 */
 
-request(aws2.sign({ service: 'sdb', path: '/?Action=ListDomains&Version=2009-04-15' }))
+// can specify any custom option or header as per usual
+request(aws2.sign({
+  service: 'importexport',
+  method: 'POST',
+  path: '/',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: 'Action=ListJobs&Version=2010-06-01'
+}))
 /*
-<?xml version="1.0"?>
-<ListDomainsResponse xmlns="http://sdb.amazonaws.com/doc/2009-04-15/">
+<ListJobsResponse xmlns="http://importexport.amazonaws.com/doc/2010-06-01/">
 ...
 */
 ```
@@ -158,9 +131,13 @@ aws2.sign(requestOptions, {
 ```
 export AWS_SECRET_ACCESS_KEY="<your-secret-access-key>"
 export AWS_ACCESS_KEY_ID="<your-access-key-id>"
+export AWS_SESSION_TOKEN="<your-session-token>"
 ```
 
 (will also use `AWS_ACCESS_KEY` and `AWS_SECRET_KEY` if available)
+
+The `sessionToken` property and `AWS_SESSION_TOKEN` environment variable are optional for signing
+with [IAM STS temporary credentials](http://docs.aws.amazon.com/STS/latest/UsingSTS/using-temp-creds.html).
 
 Installation
 ------------
