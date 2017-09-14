@@ -40,6 +40,11 @@ RequestSigner.prototype.createHost = function() {
   return this.service + region + '.amazonaws.com'
 }
 
+RequestSigner.prototype.matchLocalDate = function(date) {
+  var localDate = new Date(Date.now() - (date.getTimezoneOffset() * 60000))
+  return localDate.toISOString()
+}
+
 RequestSigner.prototype.sign = function() {
   var request = this.request,
       headers = request.headers = (request.headers || {}),
@@ -64,7 +69,7 @@ RequestSigner.prototype.sign = function() {
     params.SecurityToken = this.credentials.sessionToken
   }
 
-  params.Timestamp = date.toISOString()
+  params.Timestamp = this.matchLocalDate(date);
   params.SignatureVersion = '2'
   params.SignatureMethod = 'HmacSHA256'
   params.AWSAccessKeyId = this.credentials.accessKeyId
