@@ -69,7 +69,7 @@ RequestSigner.prototype.sign = function() {
     params.SecurityToken = this.credentials.sessionToken
   }
 
-  params.Timestamp = this.matchLocalDate(date);
+  params.Timestamp = (request.localTimezone) ? this.matchLocalDate(date) : date.toISOString()
   params.SignatureVersion = '2'
   params.SignatureMethod = 'HmacSHA256'
   params.AWSAccessKeyId = this.credentials.accessKeyId

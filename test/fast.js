@@ -110,4 +110,3 @@ describe('aws2', function() {
   })
 
 })
-
