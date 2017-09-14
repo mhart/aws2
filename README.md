@@ -112,6 +112,7 @@ populated if they don't already exist:
 - `headers['Content-Type']` (will use `'application/x-www-form-urlencoded; charset=utf-8'`
   if not given and there is a `body`)
 - `headers['Date']` (used to calculate the signature date if given, otherwise `new Date` is used)
+- `localTimezone` (used to support Timezone offset)
 
 Your AWS credentials (which can be found in your
 [AWS console](https://portal.aws.amazon.com/gp/aws/securityCredentials))
@@ -147,4 +148,3 @@ With [npm](http://npmjs.org/) do:
 ```
 npm install aws2
 ```
-
