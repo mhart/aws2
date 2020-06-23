@@ -21,8 +21,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "should": "~1.2.1",
-    "mocha": "~1.7.4"
+    "mocha": "^2.5.3",
+    "should": "^8.4.0"
   },
   "scripts": {
     "test": "mocha ./test/fast.js ./test/slow.js -b -t 100s -R list"
